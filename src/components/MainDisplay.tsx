@@ -157,7 +157,11 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
   };
 
   return (
-    <div className="relative h-screen h-[100dvh] max-h-screen max-h-[100dvh] w-screen max-w-full bg-[#03171d] text-slate-100 flex flex-col justify-between overflow-hidden select-none font-sans">
+    <div
+      className={`relative h-screen h-[100dvh] max-h-screen max-h-[100dvh] w-screen max-w-full bg-[#03171d] text-slate-100 flex flex-col justify-between overflow-hidden select-none font-sans ${
+        isFullscreen ? 'is-fullscreen' : ''
+      }`}
+    >
       {/* Background Subtle Gradient Overlay */}
       <div className="absolute inset-0 bg-radial from-[#082a32]/40 via-transparent to-transparent pointer-events-none" />
 
@@ -301,15 +305,42 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
             >
               {queueState.currentServing ? (
                 <>
-                  <div className="text-[clamp(2.2rem,min(11vw,16vh),13.5rem)] font-black text-white tracking-tight drop-shadow-[0_0_50px_rgba(255,255,255,0.7)] leading-none select-text max-w-full text-center truncate">
+                  <div
+                    className={`font-bold tracking-[0.2em] sm:tracking-[0.28em] text-[#34d399] uppercase select-none leading-none drop-shadow-[0_0_8px_rgba(52,211,153,0.4)] ${
+                      isFullscreen
+                        ? 'text-[clamp(1.49rem,min(3.15vw,4.2vh),3.15rem)] mb-1.5 sm:mb-2.5'
+                        : 'text-[clamp(1.14rem,min(2.1vw,2.8vh),2.1rem)] mb-1 sm:mb-1.5'
+                    }`}
+                  >
+                    PLATE NUMBER
+                  </div>
+                  <div
+                    className={`font-black text-white tracking-tight drop-shadow-[0_0_50px_rgba(255,255,255,0.7)] leading-none select-text max-w-full text-center truncate ${
+                      isFullscreen
+                        ? 'text-[clamp(2.38rem,min(11.9vw,17.3vh),14.6rem)]'
+                        : 'text-[clamp(2.2rem,min(11vw,16vh),13.5rem)]'
+                    }`}
+                  >
                     {queueState.currentServing.plateNumber}
                   </div>
-                  <div className="mt-1 sm:mt-2 text-[clamp(0.7rem,min(1.3vw,2vh),1.5rem)] font-bold tracking-wide text-emerald-300 drop-shadow-xs truncate max-w-full leading-tight">
+                  <div
+                    className={`font-bold tracking-wide text-emerald-300 drop-shadow-xs truncate max-w-full leading-tight ${
+                      isFullscreen
+                        ? 'mt-1.5 sm:mt-3 text-[clamp(1.05rem,min(2vw,3vh),2.25rem)]'
+                        : 'mt-1 sm:mt-2 text-[clamp(0.7rem,min(1.3vw,2vh),1.5rem)]'
+                    }`}
+                  >
                     #{queueState.currentServing.ticketNumber} · {queueState.currentServing.service}
                   </div>
                 </>
               ) : (
-                <div className="text-slate-500 font-black text-[clamp(1.1rem,min(2.5vw,3.2vh),2.5rem)] tracking-wide">
+                <div
+                  className={`text-slate-500 font-black tracking-wide ${
+                    isFullscreen
+                      ? 'text-[clamp(1.65rem,min(3.8vw,4.8vh),3.75rem)]'
+                      : 'text-[clamp(1.1rem,min(2.5vw,3.2vh),2.5rem)]'
+                  }`}
+                >
                   WAITING FOR NEXT CLIENT
                 </div>
               )}
@@ -328,13 +359,31 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
           {/* 2-Column Services Grid: Placed tightly under heading */}
           <div className="min-h-0 grid grid-cols-2 gap-x-2 sm:gap-x-4 md:gap-x-6 xl:gap-x-8 content-center overflow-hidden mt-0.5 sm:mt-1.5">
             {/* Column 1 */}
-            <div className="space-y-[clamp(0.15rem,0.8vh,0.75rem)]">
+            <div
+              className={
+                isFullscreen
+                  ? 'space-y-[clamp(0.2rem,1.2vh,1.15rem)]'
+                  : 'space-y-[clamp(0.15rem,0.8vh,0.75rem)]'
+              }
+            >
               {col1Services.map((service, idx) => (
                 <div key={`col1-${idx}`} className="flex items-start gap-1 sm:gap-2 md:gap-2.5">
-                  <span className="text-[#10b981] font-black text-[clamp(0.95rem,min(2.2vw,3vh),2.5rem)] shrink-0 leading-none mt-0.5">
+                  <span
+                    className={`text-[#10b981] font-black shrink-0 leading-none mt-0.5 ${
+                      isFullscreen
+                        ? 'text-[clamp(1.4rem,min(3.3vw,4.5vh),3.75rem)]'
+                        : 'text-[clamp(0.95rem,min(2.2vw,3vh),2.5rem)]'
+                    }`}
+                  >
                     ✓
                   </span>
-                  <span className="text-slate-100 tracking-wide text-[clamp(0.68rem,min(1.4vw,2.2vh),1.95rem)] font-bold leading-tight break-words">
+                  <span
+                    className={`text-slate-100 tracking-wide font-bold leading-tight break-words ${
+                      isFullscreen
+                        ? 'text-[clamp(1.02rem,min(2.1vw,3.3vh),2.92rem)]'
+                        : 'text-[clamp(0.68rem,min(1.4vw,2.2vh),1.95rem)]'
+                    }`}
+                  >
                     {renderServiceLabel(service)}
                   </span>
                 </div>
@@ -342,13 +391,31 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
             </div>
 
             {/* Column 2 */}
-            <div className="space-y-[clamp(0.15rem,0.8vh,0.75rem)]">
+            <div
+              className={
+                isFullscreen
+                  ? 'space-y-[clamp(0.2rem,1.2vh,1.15rem)]'
+                  : 'space-y-[clamp(0.15rem,0.8vh,0.75rem)]'
+              }
+            >
               {col2Services.map((service, idx) => (
                 <div key={`col2-${idx}`} className="flex items-start gap-1 sm:gap-2 md:gap-2.5">
-                  <span className="text-[#10b981] font-black text-[clamp(0.95rem,min(2.2vw,3vh),2.5rem)] shrink-0 leading-none mt-0.5">
+                  <span
+                    className={`text-[#10b981] font-black shrink-0 leading-none mt-0.5 ${
+                      isFullscreen
+                        ? 'text-[clamp(1.4rem,min(3.3vw,4.5vh),3.75rem)]'
+                        : 'text-[clamp(0.95rem,min(2.2vw,3vh),2.5rem)]'
+                    }`}
+                  >
                     ✓
                   </span>
-                  <span className="text-slate-100 tracking-wide text-[clamp(0.68rem,min(1.4vw,2.2vh),1.95rem)] font-bold leading-tight break-words">
+                  <span
+                    className={`text-slate-100 tracking-wide font-bold leading-tight break-words ${
+                      isFullscreen
+                        ? 'text-[clamp(1.02rem,min(2.1vw,3.3vh),2.92rem)]'
+                        : 'text-[clamp(0.68rem,min(1.4vw,2.2vh),1.95rem)]'
+                    }`}
+                  >
                     {renderServiceLabel(service)}
                   </span>
                 </div>
