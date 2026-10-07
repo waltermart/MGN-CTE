@@ -29,24 +29,24 @@ export const Logo: React.FC<LogoProps> = ({
 
   const badgeDimensions =
     size === 'sm'
-      ? 'w-10 h-10 sm:w-12 sm:h-12'
+      ? 'w-8 h-8 sm:w-10 sm:h-10'
       : size === 'lg'
       ? 'w-14 h-14 sm:w-18 sm:h-18 md:w-22 md:h-22'
-      : 'w-11 h-11 sm:w-14 sm:h-14 md:w-16 md:h-16';
+      : 'w-8 h-8 xs:w-9 xs:h-9 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16';
 
   const titleSize =
     size === 'sm'
       ? 'text-xs sm:text-sm'
       : size === 'lg'
       ? 'text-xs sm:text-base md:text-lg lg:text-xl'
-      : 'text-xs sm:text-sm md:text-base';
+      : 'text-[10px] xs:text-xs sm:text-sm md:text-base lg:text-lg';
 
   const subSize =
     size === 'sm'
       ? 'text-[8px] sm:text-[9px]'
       : size === 'lg'
       ? 'text-[9px] sm:text-[10px] md:text-xs'
-      : 'text-[9px] sm:text-[10px] md:text-xs';
+      : 'text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs';
 
   const hasCustomLogo = Boolean(activeLogoUrl && !imgError);
 

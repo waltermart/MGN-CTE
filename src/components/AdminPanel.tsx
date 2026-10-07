@@ -3,7 +3,7 @@ import {
   Check,
   ArrowRight,
   Plus,
-  SkipForward,
+  ArrowRightLeft,
   Trash2,
   Tv,
   Megaphone,
@@ -174,15 +174,52 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     showToast(`Marked plate ${completedItem.plateNumber} as done`);
   };
 
-  // 5. Skip item (moves to end of queue)
-  const handleSkip = (itemToSkip: QueueItem) => {
-    const remaining = queueState.waitingQueue.filter((i) => i.id !== itemToSkip.id);
-    const updated = [...remaining, { ...itemToSkip, status: 'skipped' as const }];
+  // 5. Transfer item (transfers to any selected service from the services list)
+  const [transferModalItem, setTransferModalItem] = useState<QueueItem | null>(null);
+  const [transferTargetService, setTransferTargetService] = useState<string>('');
+
+  const openTransferModal = (item: QueueItem) => {
+    setTransferModalItem(item);
+    const currentIdx = queueState.services.indexOf(item.service);
+    const fallback =
+      queueState.services[(currentIdx + 1) % queueState.services.length] ||
+      queueState.services[0] ||
+      item.service;
+    setTransferTargetService(fallback);
+  };
+
+  const handleTransfer = (itemToTransfer: QueueItem, newService: string) => {
+    if (!newService) return;
+
+    let updatedWaiting = [...queueState.waitingQueue];
+    let updatedServing = queueState.currentServing;
+
+    if (queueState.currentServing && queueState.currentServing.id === itemToTransfer.id) {
+      updatedServing = {
+        ...queueState.currentServing,
+        service: newService,
+      };
+    } else {
+      updatedWaiting = queueState.waitingQueue.map((item) => {
+        if (item.id === itemToTransfer.id) {
+          return {
+            ...item,
+            service: newService,
+            status: 'waiting' as const,
+          };
+        }
+        return item;
+      });
+    }
+
     onUpdateState({
       ...queueState,
-      waitingQueue: updated,
+      waitingQueue: updatedWaiting,
+      currentServing: updatedServing,
     });
-    showToast(`Moved ${itemToSkip.plateNumber} to end of queue`);
+
+    showToast(`Transferred ${itemToTransfer.plateNumber} to "${newService}"`);
+    setTransferModalItem(null);
   };
 
   // 6. Delete item from queue
@@ -461,14 +498,24 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   Now Serving
                 </h2>
                 {queueState.currentServing && (
-                  <button
-                    onClick={handleRepeatCall}
-                    title="Repeat Announcement"
-                    className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-md transition-colors text-xs flex items-center gap-1 font-medium"
-                  >
-                    <Volume2 className="w-3.5 h-3.5" />
-                    <span>Repeat</span>
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => openTransferModal(queueState.currentServing!)}
+                      title="Transfer currently serving client to another service"
+                      className="p-1.5 text-slate-500 hover:text-emerald-700 hover:bg-emerald-50 rounded-md transition-colors text-xs flex items-center gap-1 font-medium cursor-pointer"
+                    >
+                      <ArrowRightLeft className="w-3.5 h-3.5" />
+                      <span>Transfer</span>
+                    </button>
+                    <button
+                      onClick={handleRepeatCall}
+                      title="Repeat Announcement"
+                      className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-md transition-colors text-xs flex items-center gap-1 font-medium cursor-pointer"
+                    >
+                      <Volume2 className="w-3.5 h-3.5" />
+                      <span>Repeat</span>
+                    </button>
+                  </div>
                 )}
               </div>
 
@@ -651,12 +698,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                         </button>
 
                         <button
-                          onClick={() => handleSkip(item)}
-                          className="inline-flex items-center gap-1 py-1.5 px-2 sm:px-2.5 text-xs font-medium text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg transition-colors"
-                          title="Skip to bottom of queue"
+                          onClick={() => openTransferModal(item)}
+                          className="inline-flex items-center gap-1 py-1.5 px-2 sm:px-2.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 rounded-lg transition-colors cursor-pointer active:scale-95"
+                          title="Transfer to another service in the list"
                         >
-                          <SkipForward className="w-3.5 h-3.5 text-slate-500" />
-                          <span>Skip</span>
+                          <ArrowRightLeft className="w-3.5 h-3.5 text-slate-500" />
+                          <span>Transfer</span>
                         </button>
 
                         <button
@@ -988,6 +1035,152 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 className="px-4 py-2 bg-neutral-900 text-white rounded-lg text-xs font-bold hover:bg-neutral-800"
               >
                 Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Transfer Service Modal */}
+      {transferModalItem && (
+        <div
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-150"
+          onClick={() => setTransferModalItem(null)}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 space-y-4 max-h-[90vh] flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                  <ArrowRightLeft className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">Transfer Client Service</h3>
+                  <p className="text-xs text-slate-500">
+                    Select any service from the list to transfer this client.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setTransferModalItem(null)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Target Client Info */}
+            <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-200/80 flex items-center justify-between gap-3">
+              <div>
+                <span className="text-[11px] font-semibold text-slate-500 block uppercase tracking-wider">
+                  Plate Number
+                </span>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-xl font-black text-slate-900 tracking-tight">
+                    {transferModalItem.plateNumber}
+                  </span>
+                  <span className="text-xs font-semibold text-slate-500">
+                    #{transferModalItem.ticketNumber}
+                  </span>
+                </div>
+              </div>
+              <div className="text-right max-w-[220px]">
+                <span className="text-[11px] font-semibold text-slate-500 block uppercase tracking-wider">
+                  Current Service
+                </span>
+                <span className="text-xs font-bold text-slate-700 bg-white border border-slate-200 px-2 py-1 rounded-md inline-block truncate max-w-full">
+                  {transferModalItem.service}
+                </span>
+              </div>
+            </div>
+
+            {/* Service Selection */}
+            <div className="space-y-2 flex-1 overflow-hidden flex flex-col min-h-0">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  Select New Service
+                </label>
+                <span className="text-[11px] text-slate-400">
+                  {queueState.services.length} services available
+                </span>
+              </div>
+
+              {/* Quick Select Dropdown */}
+              <select
+                value={transferTargetService}
+                onChange={(e) => setTransferTargetService(e.target.value)}
+                className="w-full px-3 py-2 text-xs font-semibold text-slate-800 bg-white border border-slate-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-neutral-900 focus:border-transparent cursor-pointer"
+              >
+                {queueState.services.map((svc, idx) => (
+                  <option key={idx} value={svc}>
+                    {svc} {svc === transferModalItem.service ? '(Current)' : ''}
+                  </option>
+                ))}
+              </select>
+
+              {/* Clickable Services List with 1-click Transfer */}
+              <div className="flex-1 overflow-y-auto divide-y divide-slate-100 border border-slate-200 rounded-xl max-h-56 mt-1">
+                {queueState.services.map((svc, idx) => {
+                  const isCurrent = svc === transferModalItem.service;
+                  const isSelected = svc === transferTargetService;
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        setTransferTargetService(svc);
+                        handleTransfer(transferModalItem, svc);
+                      }}
+                      className={`w-full text-left p-2.5 sm:p-3 text-xs flex items-center justify-between transition-colors group cursor-pointer ${
+                        isSelected
+                          ? 'bg-emerald-50/80 font-bold text-emerald-950'
+                          : 'hover:bg-slate-50 text-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 min-w-0 pr-2">
+                        <span
+                          className={`w-2 h-2 rounded-full shrink-0 ${
+                            isSelected ? 'bg-emerald-500' : 'bg-slate-300'
+                          }`}
+                        />
+                        <span className="truncate">{svc}</span>
+                      </div>
+                      <div className="shrink-0 flex items-center gap-1.5">
+                        {isCurrent && (
+                          <span className="text-[10px] uppercase font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">
+                            Current
+                          </span>
+                        )}
+                        <span className="text-emerald-700 font-bold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity text-[11px]">
+                          Transfer <ArrowRight className="w-3 h-3" />
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setTransferModalItem(null)}
+                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handleTransfer(transferModalItem, transferTargetService)}
+                disabled={!transferTargetService}
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-neutral-900 hover:bg-neutral-800 disabled:opacity-40 rounded-lg shadow-xs transition-colors cursor-pointer active:scale-95"
+              >
+                <ArrowRightLeft className="w-3.5 h-3.5" />
+                <span>Confirm Transfer</span>
               </button>
             </div>
           </div>

@@ -63,15 +63,35 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
     }
   }, [queueState.lastCalledAt, queueState.currentServing?.plateNumber]);
 
+  // Listen to fullscreen changes across all browsers
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const doc = document as any;
+      setIsFullscreen(Boolean(document.fullscreenElement || doc.webkitFullscreenElement));
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
   const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
-      setIsFullscreen(true);
+    const docEl = document.documentElement as any;
+    const doc = document as any;
+    if (!document.fullscreenElement && !doc.webkitFullscreenElement) {
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen().catch(() => {});
+      } else if (docEl.webkitRequestFullscreen) {
+        docEl.webkitRequestFullscreen();
+      }
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen().catch(() => {});
+      } else if (doc.webkitExitFullscreen) {
+        doc.webkitExitFullscreen();
       }
-      setIsFullscreen(false);
     }
   };
 
@@ -141,30 +161,45 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
       {/* Background Subtle Gradient Overlay */}
       <div className="absolute inset-0 bg-radial from-[#082a32]/40 via-transparent to-transparent pointer-events-none" />
 
-      {/* Top Header Bar matching Image 3 - Fixed height */}
-      <header className="relative z-20 shrink-0 px-3 sm:px-6 md:px-10 py-2 sm:py-3 flex items-center justify-between border-b border-[#0f343e]/70 bg-[#03171d]/95 backdrop-blur-xs gap-2">
+      {/* Top Header Bar - Fluid responsive height */}
+      <header className="relative z-20 shrink-0 px-2.5 sm:px-5 md:px-8 py-1.5 sm:py-2.5 flex items-center justify-between border-b border-[#0f343e]/70 bg-[#03171d]/95 backdrop-blur-xs gap-2">
         {/* Left: Brand Identity */}
-        <Logo size="md" theme="dark" showSubtitle={true} customLogoUrl={queueState.customLogoUrl} />
+        <div className="min-w-0 flex-1">
+          <Logo size="md" theme="dark" showSubtitle={true} customLogoUrl={queueState.customLogoUrl} />
+        </div>
 
-        {/* Right: Digital Clock & Settings Action */}
-        <div className="flex items-center gap-2.5 sm:gap-5 shrink-0">
+        {/* Right: Digital Clock & Actions */}
+        <div className="flex items-center gap-1.5 sm:gap-3 md:gap-4 shrink-0">
           <div className="text-right flex flex-col items-end">
-            <div className="text-base sm:text-2xl md:text-3xl font-mono font-bold tracking-tight text-[#22d3ee] drop-shadow-[0_0_12px_rgba(34,211,238,0.4)] leading-none">
+            <div className="text-[clamp(1rem,2.1vw,2.4rem)] font-mono font-bold tracking-tight text-[#22d3ee] drop-shadow-[0_0_12px_rgba(34,211,238,0.4)] leading-none">
               {currentTime.time || '05:30:24 AM'}
             </div>
-            <div className="text-[10px] sm:text-xs md:text-sm font-semibold text-teal-200/90 leading-tight mt-1 sm:mt-1.5 tracking-wide">
+            <div className="text-[clamp(0.55rem,0.85vw,0.9rem)] font-semibold text-teal-200/90 leading-tight mt-0.5 sm:mt-1 tracking-wide">
               {currentTime.date || 'Wednesday, October 7, 2026'}
             </div>
           </div>
 
-          {/* Quick Menu / Gear Icon matching top right in Image 3 */}
+          {/* Direct Fullscreen Button for Quick Access on any Browser */}
+          <button
+            onClick={toggleFullscreen}
+            title={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+            className="p-1 sm:p-2 text-teal-300/70 hover:text-teal-200 hover:bg-[#082c35] rounded-lg transition-colors cursor-pointer"
+          >
+            {isFullscreen ? (
+              <Minimize2 className="w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5" />
+            ) : (
+              <Maximize2 className="w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5" />
+            )}
+          </button>
+
+          {/* Quick Menu / Gear Icon */}
           <div className="relative">
             <button
               onClick={() => setShowMenu(!showMenu)}
               title="Display Options"
-              className="p-1.5 sm:p-2 text-teal-300/60 hover:text-teal-200 hover:bg-[#082c35] rounded-lg transition-colors cursor-pointer"
+              className="p-1 sm:p-2 text-teal-300/70 hover:text-teal-200 hover:bg-[#082c35] rounded-lg transition-colors cursor-pointer"
             >
-              <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Settings className="w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5" />
             </button>
 
             {/* Gear dropdown options */}
@@ -175,7 +210,7 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
                     setShowMenu(false);
                     onOpenSettings();
                   }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 text-teal-100 hover:bg-[#0c333c] rounded-lg transition-colors text-left font-semibold"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-teal-100 hover:bg-[#0c333c] rounded-lg transition-colors text-left font-semibold cursor-pointer"
                 >
                   <ArrowLeft className="w-4 h-4 text-emerald-400" />
                   <span>Open Settings Panel</span>
@@ -186,7 +221,7 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
                     toggleFullscreen();
                     setShowMenu(false);
                   }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 text-teal-100 hover:bg-[#0c333c] rounded-lg transition-colors text-left"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-teal-100 hover:bg-[#0c333c] rounded-lg transition-colors text-left cursor-pointer"
                 >
                   {isFullscreen ? (
                     <Minimize2 className="w-4 h-4 text-teal-300" />
@@ -202,7 +237,7 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
                       onToggleVoice();
                       setShowMenu(false);
                     }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 text-teal-100 hover:bg-[#0c333c] rounded-lg transition-colors text-left"
+                    className="w-full flex items-center gap-2.5 px-3 py-2 text-teal-100 hover:bg-[#0c333c] rounded-lg transition-colors text-left cursor-pointer"
                   >
                     {queueState.enableVoice ? (
                       <Volume2 className="w-4 h-4 text-emerald-400" />
@@ -218,30 +253,30 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
         </div>
       </header>
 
-      {/* Main Content Area: Equal 50/50 Column Widths, zero scrolling */}
-      <main className="relative z-10 flex-1 min-h-0 w-full max-w-[1850px] mx-auto px-3 sm:px-6 md:px-10 py-1.5 sm:py-2 md:py-3.5 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-0 items-stretch overflow-hidden">
-        {/* Left Column (Equal 50% width): NEXT and NOW SERVING with center horizontal line and vertical divider on right */}
-        <div className="w-full h-full min-h-0 flex flex-col justify-between gap-1 sm:gap-2 overflow-hidden md:pr-6 lg:pr-10 md:border-r-2 md:border-teal-500/50">
-          {/* 1. NEXT Section - Compact height */}
+      {/* Main Content Area: Retains 2 Equal Columns on ALL screens, zero vertical scrolling */}
+      <main className="relative z-10 flex-1 min-h-0 w-full max-w-[2400px] mx-auto px-2 sm:px-4 md:px-8 py-1 sm:py-2 md:py-3 grid grid-cols-2 gap-0 items-stretch overflow-hidden">
+        {/* Left Column (50% width): NEXT and NOW SERVING with center horizontal line and vertical divider on right */}
+        <div className="w-full h-full min-h-0 flex flex-col justify-between gap-1 sm:gap-2 overflow-hidden pr-2 sm:pr-4 md:pr-6 lg:pr-8 border-r border-teal-500/40 sm:border-r-2 sm:border-teal-500/50">
+          {/* 1. NEXT Section - Compact proportional height */}
           <div className="shrink-0 space-y-0.5 sm:space-y-1">
             {/* Header increased by 20% */}
-            <h2 className="text-center text-[clamp(1.2rem,2.8vh,2.0rem)] font-black tracking-[0.35em] text-[#f59e0b] uppercase drop-shadow-[0_0_8px_rgba(245,158,11,0.4)]">
+            <h2 className="text-center text-[clamp(0.85rem,min(1.8vw,2.5vh),1.85rem)] font-black tracking-[0.2em] sm:tracking-[0.35em] text-[#f59e0b] uppercase drop-shadow-[0_0_8px_rgba(245,158,11,0.4)]">
               N E X T
             </h2>
 
             {/* Compact Golden Card with Plate Number increased by 30% */}
-            <div className="relative rounded-xl border border-[#d97706]/50 bg-radial from-[#1e1b0c]/80 via-[#101918]/90 to-[#07191d] py-1 sm:py-2 px-3 sm:px-5 text-center shadow-[0_0_20px_rgba(245,158,11,0.06)]">
+            <div className="relative rounded-lg sm:rounded-xl border border-[#d97706]/50 bg-radial from-[#1e1b0c]/80 via-[#101918]/90 to-[#07191d] py-1 sm:py-1.5 md:py-2 px-2 sm:px-4 text-center shadow-[0_0_20px_rgba(245,158,11,0.06)]">
               {nextItem ? (
                 <>
-                  <div className="text-[clamp(3.4rem,9.4vh,7.15rem)] font-black text-[#fbbf24] tracking-wider drop-shadow-[0_0_16px_rgba(251,191,36,0.35)] leading-tight truncate">
+                  <div className="text-[clamp(1.4rem,min(5.2vw,7.6vh),5.5rem)] font-black text-[#fbbf24] tracking-wider drop-shadow-[0_0_16px_rgba(251,191,36,0.35)] leading-tight truncate">
                     {nextItem.plateNumber}
                   </div>
-                  <div className="text-[clamp(0.75rem,1.6vh,1.1rem)] font-semibold tracking-wide text-amber-200/90 truncate leading-tight">
+                  <div className="text-[clamp(0.6rem,min(1.05vw,1.5vh),1.05rem)] font-semibold tracking-wide text-amber-200/90 truncate leading-tight">
                     #{nextItem.ticketNumber} · {nextItem.service}
                   </div>
                 </>
               ) : (
-                <div className="py-2 text-slate-500 font-semibold text-[clamp(0.85rem,1.7vh,1.2rem)]">
+                <div className="py-1 text-slate-500 font-semibold text-[clamp(0.7rem,min(1.2vw,1.5vh),1.1rem)]">
                   -- NO CLIENT IN QUEUE --
                 </div>
               )}
@@ -249,32 +284,32 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
           </div>
 
           {/* Horizontal Line in the center between sections */}
-          <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-teal-400/80 to-transparent my-1 sm:my-2 shrink-0 shadow-[0_0_12px_rgba(45,212,191,0.5)]" />
+          <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-teal-400/80 to-transparent my-0.5 sm:my-1.5 shrink-0 shadow-[0_0_12px_rgba(45,212,191,0.5)]" />
 
           {/* 2. NOW SERVING Section - Auto expands to fill available height cleanly */}
-          <div className="flex-1 min-h-0 flex flex-col justify-center space-y-0.5 sm:space-y-1.5 overflow-hidden">
-            {/* Header increased to 150% */}
-            <h2 className="text-center text-[clamp(1.3rem,3vh,2.2rem)] font-black tracking-[0.3em] sm:tracking-[0.4em] text-[#10b981] uppercase drop-shadow-[0_0_14px_rgba(16,185,129,0.45)] shrink-0">
+          <div className="flex-1 min-h-0 flex flex-col justify-center space-y-0.5 sm:space-y-1 overflow-hidden">
+            {/* Header */}
+            <h2 className="text-center text-[clamp(1.05rem,min(2.4vw,3.2vh),2.25rem)] font-black tracking-[0.2em] sm:tracking-[0.4em] text-[#10b981] uppercase drop-shadow-[0_0_14px_rgba(16,185,129,0.45)] shrink-0">
               N O W &nbsp; S E R V I N G
             </h2>
 
             {/* Glowing Emerald / Teal Card fitting within viewport */}
             <div
-              className={`relative rounded-2xl sm:rounded-3xl border-2 md:border-[3px] border-[#059669]/80 bg-radial from-[#033433]/95 via-[#042426]/95 to-[#03171d] p-2 sm:p-4 md:p-6 text-center shadow-[0_0_55px_rgba(16,185,129,0.25)] flex flex-col items-center justify-center flex-1 min-h-0 w-full transition-all duration-300 overflow-hidden ${
+              className={`relative rounded-xl sm:rounded-2xl md:rounded-3xl border-2 md:border-[3px] border-[#059669]/80 bg-radial from-[#033433]/95 via-[#042426]/95 to-[#03171d] p-1.5 sm:p-3 md:p-5 text-center shadow-[0_0_55px_rgba(16,185,129,0.25)] flex flex-col items-center justify-center flex-1 min-h-0 w-full transition-all duration-300 overflow-hidden ${
                 isPulseActive ? 'ring-4 ring-emerald-400 scale-[1.01] shadow-[0_0_75px_rgba(16,185,129,0.6)]' : ''
               }`}
             >
               {queueState.currentServing ? (
                 <>
-                  <div className="text-[clamp(4.5rem,22vh,18rem)] font-black text-white tracking-tight drop-shadow-[0_0_50px_rgba(255,255,255,0.7)] leading-none select-text max-w-full text-center truncate">
+                  <div className="text-[clamp(2.2rem,min(11vw,16vh),13.5rem)] font-black text-white tracking-tight drop-shadow-[0_0_50px_rgba(255,255,255,0.7)] leading-none select-text max-w-full text-center truncate">
                     {queueState.currentServing.plateNumber}
                   </div>
-                  <div className="mt-1 sm:mt-2 text-[clamp(0.85rem,2.2vh,1.75rem)] font-bold tracking-wide text-emerald-300 drop-shadow-xs truncate max-w-full leading-tight">
+                  <div className="mt-1 sm:mt-2 text-[clamp(0.7rem,min(1.3vw,2vh),1.5rem)] font-bold tracking-wide text-emerald-300 drop-shadow-xs truncate max-w-full leading-tight">
                     #{queueState.currentServing.ticketNumber} · {queueState.currentServing.service}
                   </div>
                 </>
               ) : (
-                <div className="text-slate-500 font-black text-[clamp(1.5rem,3.5vh,3rem)] tracking-wide">
+                <div className="text-slate-500 font-black text-[clamp(1.1rem,min(2.5vw,3.2vh),2.5rem)] tracking-wide">
                   WAITING FOR NEXT CLIENT
                 </div>
               )}
@@ -282,24 +317,24 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
           </div>
         </div>
 
-        {/* Right Column (Equal 50% width): SERVICES OFFERED */}
-        <div className="w-full h-full min-h-0 flex flex-col justify-center py-1 sm:py-2 md:pl-6 lg:pl-10 overflow-hidden">
+        {/* Right Column (50% width): SERVICES OFFERED */}
+        <div className="w-full h-full min-h-0 flex flex-col justify-center py-0.5 sm:py-1 md:py-2 pl-2 sm:pl-4 md:pl-6 lg:pl-8 overflow-hidden">
           {/* Centered heading: character spacing reduced, bold, font size increased by 50% */}
-          <h2 className="shrink-0 text-center text-[clamp(2.6rem,7.4vh,6.25rem)] font-black tracking-normal text-[#10b981] uppercase drop-shadow-[0_0_20px_rgba(16,185,129,0.5)] leading-tight mb-1 sm:mb-2">
+          <h2 className="shrink-0 text-center text-[clamp(1.25rem,min(3.8vw,6.8vh),5.5rem)] font-black tracking-normal text-[#10b981] uppercase drop-shadow-[0_0_20px_rgba(16,185,129,0.5)] leading-tight mb-1 sm:mb-2">
             <span className="inline-block">SERVICES</span>{' '}
             <span className="inline-block">OFFERED</span>
           </h2>
 
-          {/* 2-Column Services Grid: Placed tightly under heading, font decreased by 20%, 3+ words break into 2 lines */}
-          <div className="min-h-0 grid grid-cols-2 gap-x-4 sm:gap-x-6 xl:gap-x-10 content-center overflow-hidden mt-1 sm:mt-2">
+          {/* 2-Column Services Grid: Placed tightly under heading */}
+          <div className="min-h-0 grid grid-cols-2 gap-x-2 sm:gap-x-4 md:gap-x-6 xl:gap-x-8 content-center overflow-hidden mt-0.5 sm:mt-1.5">
             {/* Column 1 */}
-            <div className="space-y-[clamp(0.2rem,0.9vh,0.85rem)]">
+            <div className="space-y-[clamp(0.15rem,0.8vh,0.75rem)]">
               {col1Services.map((service, idx) => (
-                <div key={`col1-${idx}`} className="flex items-start gap-1.5 sm:gap-2.5">
-                  <span className="text-[#10b981] font-black text-[clamp(1.7rem,4.3vh,3.1rem)] shrink-0 leading-none mt-0.5">
+                <div key={`col1-${idx}`} className="flex items-start gap-1 sm:gap-2 md:gap-2.5">
+                  <span className="text-[#10b981] font-black text-[clamp(0.95rem,min(2.2vw,3vh),2.5rem)] shrink-0 leading-none mt-0.5">
                     ✓
                   </span>
-                  <span className="text-slate-100 tracking-wide text-[clamp(1.4rem,3.6vh,2.75rem)] font-bold leading-tight break-words">
+                  <span className="text-slate-100 tracking-wide text-[clamp(0.68rem,min(1.4vw,2.2vh),1.95rem)] font-bold leading-tight break-words">
                     {renderServiceLabel(service)}
                   </span>
                 </div>
@@ -307,13 +342,13 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
             </div>
 
             {/* Column 2 */}
-            <div className="space-y-[clamp(0.2rem,0.9vh,0.85rem)]">
+            <div className="space-y-[clamp(0.15rem,0.8vh,0.75rem)]">
               {col2Services.map((service, idx) => (
-                <div key={`col2-${idx}`} className="flex items-start gap-1.5 sm:gap-2.5">
-                  <span className="text-[#10b981] font-black text-[clamp(1.7rem,4.3vh,3.1rem)] shrink-0 leading-none mt-0.5">
+                <div key={`col2-${idx}`} className="flex items-start gap-1 sm:gap-2 md:gap-2.5">
+                  <span className="text-[#10b981] font-black text-[clamp(0.95rem,min(2.2vw,3vh),2.5rem)] shrink-0 leading-none mt-0.5">
                     ✓
                   </span>
-                  <span className="text-slate-100 tracking-wide text-[clamp(1.4rem,3.6vh,2.75rem)] font-bold leading-tight break-words">
+                  <span className="text-slate-100 tracking-wide text-[clamp(0.68rem,min(1.4vw,2.2vh),1.95rem)] font-bold leading-tight break-words">
                     {renderServiceLabel(service)}
                   </span>
                 </div>
@@ -323,17 +358,17 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
         </div>
       </main>
 
-      {/* Bottom Announcement Bar / Continuous Marquee Ticker - Fixed height */}
-      <footer className="relative z-20 shrink-0 bg-[#021014] border-t border-[#0b2931] py-1.5 sm:py-2.5 px-3 sm:px-4 overflow-hidden shadow-2xl">
+      {/* Bottom Announcement Bar / Continuous Marquee Ticker */}
+      <footer className="relative z-20 shrink-0 bg-[#021014] border-t border-[#0b2931] py-1 sm:py-2 px-2 sm:px-4 overflow-hidden shadow-2xl">
         <div className="flex items-center overflow-hidden">
           {/* Seamless CSS Marquee */}
-          <div className="animate-marquee whitespace-nowrap text-[clamp(0.7rem,1.6vh,1.05rem)] font-semibold tracking-wide">
+          <div className="animate-marquee whitespace-nowrap text-[clamp(0.65rem,1.4vh,1.05rem)] font-semibold tracking-wide">
             {/* Render 4 duplicates to ensure an uninterrupted smooth continuous loop */}
             {[0, 1, 2, 3].map((loopIdx) => (
               <span key={loopIdx} className="inline-flex items-center">
                 {marqueeItems.map((item, itemIdx) => (
-                  <span key={`${loopIdx}-${itemIdx}`} className="inline-flex items-center mx-3 sm:mx-5">
-                    <span className="text-[#22d3ee] mr-1.5 sm:mr-2 text-sm sm:text-base">★</span>
+                  <span key={`${loopIdx}-${itemIdx}`} className="inline-flex items-center mx-2.5 sm:mx-4 md:mx-5">
+                    <span className="text-[#22d3ee] mr-1 sm:mr-2 text-xs sm:text-sm md:text-base">★</span>
                     <span className="text-white drop-shadow-xs">{item}</span>
                   </span>
                 ))}
