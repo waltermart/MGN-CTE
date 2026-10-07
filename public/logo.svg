@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <!-- White Background Circle -->
+  <circle cx="250" cy="250" r="248" fill="#ffffff" />
+
+  <!-- Thick Outer Black Circle -->
+  <circle cx="250" cy="250" r="236" fill="none" stroke="#000000" stroke-width="24" />
+
+  <!-- Thin Inner Concentric Black Circle -->
+  <circle cx="250" cy="250" r="190" fill="none" stroke="#000000" stroke-width="4.5" />
+
+  <!-- Circular Text Path for CERTIFIED TRANSPORT EXPERTS -->
+  <path id="topTextArc" d="M 80,250 A 170,170 0 1,1 420,250" fill="none" />
+  <text font-family="Arial, Helvetica, sans-serif" font-size="24.5" font-weight="900" fill="#000000" letter-spacing="4">
+    <textPath href="#topTextArc" startOffset="50%" text-anchor="middle">
+      CERTIFIED TRANSPORT EXPERTS
+    </textPath>
+  </text>
+
+  <!-- Left Vertical MGN Text -->
+  <text x="59" y="218" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="20" fill="#000000" text-anchor="middle">M</text>
+  <text x="59" y="243" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="20" fill="#000000" text-anchor="middle">G</text>
+  <text x="59" y="268" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="20" fill="#000000" text-anchor="middle">N</text>
+
+  <!-- Circular Text Path for LTO ACCREDITED -->
+  <path id="bottomTextArc" d="M 100,270 A 170,170 0 0,0 400,270" fill="none" />
+  <text font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="900" fill="#000000" letter-spacing="6">
+    <textPath href="#bottomTextArc" startOffset="50%" text-anchor="middle">
+      LTO ACCREDITED
+    </textPath>
+  </text>
+
+  <!-- Inner Arc Highlights / Framing Brackets near bottom -->
+  <path d="M 64,295 A 190,190 0 0,0 114,395" fill="none" stroke="#000000" stroke-width="4.5" />
+  <path d="M 436,295 A 190,190 0 0,1 386,395" fill="none" stroke="#000000" stroke-width="4.5" />
+
+  <!-- Center Vehicle Silhouette (Aerodynamic Red & Black Sports Car) -->
+  <g transform="translate(115, 150)">
+    <!-- Black Roof Structure & Slats / Sunroof Vents -->
+    <path d="M 64,36 C 85,10, 150,0, 205,36 C 180,24, 110,18, 64,36 Z" fill="#000000" />
+    <!-- Louvers / Vents in roof -->
+    <line x1="82" y1="28" x2="89" y2="20" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+    <line x1="100" y1="23" x2="108" y2="15" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+    <line x1="120" y1="19" x2="128" y2="12" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+    <line x1="141" y1="18" x2="149" y2="11" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+    <line x1="162" y1="19" x2="169" y2="13" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+    <line x1="181" y1="23" x2="187" y2="17" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+    <line x1="198" y1="29" x2="203" y2="24" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+
+    <!-- Red Upper Body Swooshes / Hood & Roofline -->
+    <!-- Top red swoosh -->
+    <path d="M 32,44 C 70,30, 160,26, 235,74 C 205,52, 130,42, 32,44 Z" fill="#e11d24" />
+    <!-- Main side red flame / body sweep -->
+    <path d="M 46,55 C 75,52, 115,53, 142,65 C 160,54, 195,58, 238,82 C 220,70, 175,64, 145,74 C 115,62, 75,60, 46,55 Z" fill="#e11d24" />
+    <!-- Lower red accent swoosh -->
+    <path d="M 65,65 C 105,70, 145,86, 170,95 C 150,88, 110,75, 65,65 Z" fill="#e11d24" />
+    <path d="M 148,82 C 175,85, 208,98, 232,104 C 220,94, 185,86, 148,82 Z" fill="#e11d24" />
+
+    <!-- Black Lower Body & Wheel Arches -->
+    <path d="M 15,62 C 25,58, 38,62, 42,72 C 38,82, 28,88, 18,92 L 15,82 C 22,80, 28,76, 28,70 C 26,65, 18,65, 15,62 Z" fill="#000000" />
+    <path d="M 32,60 C 45,56, 52,65, 52,78 C 35,74, 25,82, 18,95 C 15,92, 20,85, 30,80 C 45,72, 40,64, 32,60 Z" fill="#000000" />
+
+    <!-- Black Rocker Panel & Aero Base connecting wheels -->
+    <path d="M 65,95 C 80,82, 110,85, 145,95 C 175,102, 195,104, 208,110 L 202,114 C 185,110, 160,105, 130,102 C 100,98, 75,98, 65,95 Z" fill="#000000" />
+    
+    <!-- Front Bumper Chin & Right Fender Curve -->
+    <path d="M 235,74 C 248,88, 252,102, 240,118 C 248,112, 254,102, 252,90 C 250,82, 244,78, 235,74 Z" fill="#000000" />
+
+    <!-- REAR WHEEL (Left) -->
+    <g transform="translate(43, 90)">
+      <!-- Outer Tire -->
+      <circle cx="0" cy="0" r="23" fill="#000000" />
+      <circle cx="0" cy="0" r="19" fill="#111111" />
+      <!-- Rim Outer Ring -->
+      <circle cx="0" cy="0" r="15" fill="none" stroke="#ffffff" stroke-width="2" />
+      <!-- 8-Spoke Star Rim Pattern -->
+      <line x1="0" y1="-14" x2="0" y2="14" stroke="#ffffff" stroke-width="2.5" />
+      <line x1="-14" y1="0" x2="14" y2="0" stroke="#ffffff" stroke-width="2.5" />
+      <line x1="-10" y1="-10" x2="10" y2="10" stroke="#ffffff" stroke-width="2.5" />
+      <line x1="-10" y1="10" x2="10" y2="-10" stroke="#ffffff" stroke-width="2.5" />
+      <!-- Center Hub -->
+      <circle cx="0" cy="0" r="4.5" fill="#000000" stroke="#ffffff" stroke-width="1.2" />
+    </g>
+
+    <!-- FRONT WHEEL (Right) -->
+    <g transform="translate(202, 90)">
+      <!-- Outer Tire -->
+      <circle cx="0" cy="0" r="23" fill="#000000" />
+      <circle cx="0" cy="0" r="19" fill="#111111" />
+      <!-- Rim Outer Ring -->
+      <circle cx="0" cy="0" r="15" fill="none" stroke="#ffffff" stroke-width="2" />
+      <!-- 8-Spoke Star Rim Pattern -->
+      <line x1="0" y1="-14" x2="0" y2="14" stroke="#ffffff" stroke-width="2.5" />
+      <line x1="-14" y1="0" x2="14" y2="0" stroke="#ffffff" stroke-width="2.5" />
+      <line x1="-10" y1="-10" x2="10" y2="10" stroke="#ffffff" stroke-width="2.5" />
+      <line x1="-10" y1="10" x2="10" y2="-10" stroke="#ffffff" stroke-width="2.5" />
+      <!-- Center Hub -->
+      <circle cx="0" cy="0" r="4.5" fill="#000000" stroke="#ffffff" stroke-width="1.2" />
+    </g>
+  </g>
+
+  <!-- MGN-CTE Text Below Car -->
+  <text x="250" y="300" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-weight="900" font-size="34" fill="#000000" letter-spacing="2">
+    MGN-CTE
+  </text>
+
+  <!-- CASTILLEJOS, ZAMBALES Text Below MGN-CTE -->
+  <text x="250" y="318" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-style="italic" font-weight="700" font-size="14.5" fill="#000000" letter-spacing="4.5">
+    CASTILLEJOS, ZAMBALES
+  </text>
+</svg>

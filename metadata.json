@@ -1,0 +1,8 @@
+{
+  "name": "MGN Transport Experts - Queuing System",
+  "description": "Smart transport queuing management system with operator control panel and TV display screen.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
