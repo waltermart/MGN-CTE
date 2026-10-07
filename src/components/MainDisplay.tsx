@@ -318,7 +318,7 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
                     className={`font-black text-white tracking-tight drop-shadow-[0_0_50px_rgba(255,255,255,0.7)] leading-none select-text max-w-full text-center truncate ${
                       isFullscreen
                         ? 'text-[clamp(2.38rem,min(11.9vw,17.3vh),14.6rem)]'
-                        : 'text-[clamp(2.2rem,min(11vw,16vh),13.5rem)]'
+                        : 'text-[clamp(3.3rem,min(16.5vw,24vh),20.25rem)]'
                     }`}
                   >
                     {queueState.currentServing.plateNumber}
@@ -363,7 +363,7 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
               className={
                 isFullscreen
                   ? 'space-y-[clamp(0.2rem,1.2vh,1.15rem)]'
-                  : 'space-y-[clamp(0.15rem,0.8vh,0.75rem)]'
+                  : 'space-y-[clamp(0.18rem,1vh,0.95rem)]'
               }
             >
               {col1Services.map((service, idx) => (
@@ -372,7 +372,7 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
                     className={`text-[#10b981] font-black shrink-0 leading-none mt-0.5 ${
                       isFullscreen
                         ? 'text-[clamp(1.4rem,min(3.3vw,4.5vh),3.75rem)]'
-                        : 'text-[clamp(0.95rem,min(2.2vw,3vh),2.5rem)]'
+                        : 'text-[clamp(1.4rem,min(3.3vw,4.5vh),3.75rem)]'
                     }`}
                   >
                     ✓
@@ -381,7 +381,7 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
                     className={`text-slate-100 tracking-wide font-bold leading-tight break-words ${
                       isFullscreen
                         ? 'text-[clamp(1.02rem,min(2.1vw,3.3vh),2.92rem)]'
-                        : 'text-[clamp(0.68rem,min(1.4vw,2.2vh),1.95rem)]'
+                        : 'text-[clamp(1.02rem,min(2.1vw,3.3vh),2.92rem)]'
                     }`}
                   >
                     {renderServiceLabel(service)}
@@ -395,7 +395,7 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
               className={
                 isFullscreen
                   ? 'space-y-[clamp(0.2rem,1.2vh,1.15rem)]'
-                  : 'space-y-[clamp(0.15rem,0.8vh,0.75rem)]'
+                  : 'space-y-[clamp(0.18rem,1vh,0.95rem)]'
               }
             >
               {col2Services.map((service, idx) => (
@@ -404,7 +404,7 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
                     className={`text-[#10b981] font-black shrink-0 leading-none mt-0.5 ${
                       isFullscreen
                         ? 'text-[clamp(1.4rem,min(3.3vw,4.5vh),3.75rem)]'
-                        : 'text-[clamp(0.95rem,min(2.2vw,3vh),2.5rem)]'
+                        : 'text-[clamp(1.4rem,min(3.3vw,4.5vh),3.75rem)]'
                     }`}
                   >
                     ✓
@@ -413,7 +413,7 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
                     className={`text-slate-100 tracking-wide font-bold leading-tight break-words ${
                       isFullscreen
                         ? 'text-[clamp(1.02rem,min(2.1vw,3.3vh),2.92rem)]'
-                        : 'text-[clamp(0.68rem,min(1.4vw,2.2vh),1.95rem)]'
+                        : 'text-[clamp(1.02rem,min(2.1vw,3.3vh),2.92rem)]'
                     }`}
                   >
                     {renderServiceLabel(service)}
