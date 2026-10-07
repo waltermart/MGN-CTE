@@ -33,8 +33,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   onUpdateState,
   onViewDisplay,
 }) => {
-  // Input form state
-  const [newPlate, setNewPlate] = useState('TEST 1342');
+  // Input form state (cleared on load)
+  const [newPlate, setNewPlate] = useState('');
   const [selectedService, setSelectedService] = useState(
     queueState.services[0] || '1. Private Emission Testing Center'
   );
@@ -383,9 +383,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         </div>
       )}
 
-      {/* Top Navigation Bar matching Image 1 */}
-      <header className="bg-white border-b border-slate-200 px-3 sm:px-6 md:px-8 py-3 sticky top-0 z-40 flex items-center justify-between shadow-xs gap-2">
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+      {/* Top Navigation Bar */}
+      <header className="bg-white border-b border-slate-200 px-3 sm:px-6 md:px-8 py-2.5 sm:py-3 sticky top-0 z-40 flex items-center justify-between shadow-xs gap-2">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 sm:flex-initial">
           <Logo size="md" theme="light" customLogoUrl={queueState.customLogoUrl} />
         </div>
 
@@ -405,27 +405,29 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 : 'bg-slate-50 border-slate-200 text-slate-400 hover:text-slate-600'
             }`}
           >
-            {queueState.enableVoice ? <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+            {queueState.enableVoice ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
           </button>
 
           {/* View History Button */}
           <button
             onClick={() => setShowHistoryModal(true)}
-            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+            className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+            title="View served clients history"
           >
-            <History className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span className="hidden md:inline">History</span> ({queueState.servedHistory.length})
+            <History className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-700" />
+            <span className="hidden md:inline">History</span>
+            <span className="text-[11px] font-bold text-slate-700">({queueState.servedHistory.length})</span>
           </button>
 
-          {/* View Display Action Button matching Image 1: [ 🖥 View Display ] */}
+          {/* View Display Action Button */}
           <div className="flex items-center gap-1">
             <button
               onClick={onViewDisplay}
               className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs font-semibold text-slate-800 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 shadow-xs transition-all active:scale-95"
             >
               <Tv className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-700" />
-              <span className="hidden xs:inline">View Display</span>
-              <span className="xs:hidden">Display</span>
+              <span className="hidden sm:inline">View Display</span>
+              <span className="sm:hidden">Display</span>
             </button>
             <button
               onClick={openDisplayPopout}
@@ -442,15 +444,15 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       <main className="max-w-7xl mx-auto w-full px-3 sm:px-6 md:px-8 py-4 sm:py-6 space-y-5 sm:space-y-6">
         {/* Upper Row: Left Column (Add, Now Serving, Stats, Layout) + Right Column (Waiting Queue) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
-          {/* Left Column (Approx 4 cols on large screen) */}
-          <div className="lg:col-span-5 space-y-6">
+          {/* Left Column (Approx 5 cols on large screen) */}
+          <div className="lg:col-span-5 space-y-5 sm:space-y-6">
             {/* 1. Add to Queue Card */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 space-y-3.5 sm:space-y-4">
               <h2 className="text-base font-bold text-slate-900 tracking-tight">
                 Add to Queue
               </h2>
 
-              <form onSubmit={handleAddToQueue} className="space-y-4">
+              <form onSubmit={handleAddToQueue} className="space-y-3.5 sm:space-y-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                     Plate Number
@@ -460,7 +462,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     value={newPlate}
                     onChange={(e) => setNewPlate(e.target.value.toUpperCase())}
                     placeholder="e.g. TEST 1342 or ABC 1234"
-                    className="w-full px-3.5 py-2.5 text-sm font-semibold tracking-wider text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all placeholder:text-slate-400 uppercase"
+                    className="w-full px-3.5 py-2.5 text-base sm:text-sm font-semibold tracking-wider text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all placeholder:text-slate-400 uppercase"
                   />
                 </div>
 
@@ -471,7 +473,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   <select
                     value={selectedService}
                     onChange={(e) => setSelectedService(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs font-medium text-slate-800 bg-white border border-slate-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all appearance-none cursor-pointer"
+                    className="w-full px-3.5 py-2.5 text-base sm:text-xs font-medium text-slate-800 bg-white border border-slate-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all appearance-none cursor-pointer"
                   >
                     {queueState.services.map((service, index) => (
                       <option key={index} value={service}>
@@ -483,7 +485,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-bold text-white bg-neutral-900 hover:bg-neutral-800 rounded-lg shadow-xs transition-colors cursor-pointer active:scale-[0.99]"
+                  className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-bold text-white bg-neutral-900 hover:bg-neutral-800 rounded-lg shadow-xs transition-colors cursor-pointer active:scale-[0.99] min-h-[42px]"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add to Queue</span>
@@ -492,13 +494,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
 
             {/* 2. Now Serving Card */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
-              <div className="flex items-center justify-between">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 space-y-3.5 sm:space-y-4">
+              <div className="flex items-center justify-between gap-2">
                 <h2 className="text-base font-bold text-slate-900 tracking-tight">
                   Now Serving
                 </h2>
                 {queueState.currentServing && (
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 shrink-0">
                     <button
                       onClick={() => openTransferModal(queueState.currentServing!)}
                       title="Transfer currently serving client to another service"
@@ -519,30 +521,30 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 )}
               </div>
 
-              {/* Highlighted current client box matching Image 1 */}
-              <div className="border-2 border-red-500 rounded-xl p-6 text-center bg-red-50/20 shadow-xs">
+              {/* Highlighted current client box */}
+              <div className="border-2 border-red-500 rounded-xl p-4 sm:p-6 text-center bg-red-50/20 shadow-xs">
                 {queueState.currentServing ? (
                   <>
-                    <div className="text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 tracking-tight">
+                    <div className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 tracking-tight break-words max-w-full leading-tight">
                       {queueState.currentServing.plateNumber}
                     </div>
-                    <div className="mt-2 text-sm font-semibold text-slate-600">
+                    <div className="mt-2 text-xs sm:text-sm font-semibold text-slate-600 truncate max-w-full">
                       #{queueState.currentServing.ticketNumber} · {queueState.currentServing.service}
                     </div>
                   </>
                 ) : (
-                  <div className="py-6 text-slate-400 text-sm font-semibold">
+                  <div className="py-5 sm:py-6 text-slate-400 text-xs sm:text-sm font-semibold">
                     No client currently being served
                   </div>
                 )}
               </div>
 
               {/* Action Buttons: [ Done ] and [ Call Next ] */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
                 <button
                   onClick={handleCurrentDone}
                   disabled={!queueState.currentServing}
-                  className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 disabled:opacity-40 disabled:pointer-events-none rounded-lg transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 disabled:opacity-40 disabled:pointer-events-none rounded-lg transition-colors cursor-pointer min-h-[42px]"
                 >
                   <Check className="w-4 h-4 text-emerald-600" />
                   <span>Done</span>
@@ -550,7 +552,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                 <button
                   onClick={handleCallNext}
-                  className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-bold text-white bg-neutral-900 hover:bg-neutral-800 rounded-lg shadow-xs transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-bold text-white bg-neutral-900 hover:bg-neutral-800 rounded-lg shadow-xs transition-colors cursor-pointer min-h-[42px]"
                 >
                   <ArrowRight className="w-4 h-4" />
                   <span>Call Next</span>
@@ -558,10 +560,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
             </div>
 
-            {/* 3. Metric Stats Grid (Waiting: 4, Served: 9) */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-xl border border-slate-200 p-4 text-center shadow-xs">
-                <div className="text-3xl font-black text-emerald-600 tabular-nums">
+            {/* 3. Metric Stats Grid (Waiting, Served) */}
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              <div className="bg-white rounded-xl border border-slate-200 p-3.5 sm:p-4 text-center shadow-xs">
+                <div className="text-2xl sm:text-3xl font-black text-emerald-600 tabular-nums">
                   {queueState.waitingQueue.length}
                 </div>
                 <div className="text-xs font-semibold text-slate-500 mt-0.5">
@@ -571,9 +573,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
               <div
                 onClick={() => setShowHistoryModal(true)}
-                className="bg-white rounded-xl border border-slate-200 p-4 text-center shadow-xs cursor-pointer hover:border-slate-300 transition-colors"
+                className="bg-white rounded-xl border border-slate-200 p-3.5 sm:p-4 text-center shadow-xs cursor-pointer hover:border-slate-300 transition-colors"
               >
-                <div className="text-3xl font-black text-slate-900 tabular-nums">
+                <div className="text-2xl sm:text-3xl font-black text-slate-900 tabular-nums">
                   {queueState.servedHistory.length}
                 </div>
                 <div className="text-xs font-semibold text-slate-500 mt-0.5">
@@ -583,7 +585,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
 
             {/* 4. Display Layout Card */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-3">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 space-y-3">
               <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
                 <Tv className="w-4 h-4 text-emerald-600" />
                 <span>Display Layout</span>
@@ -592,7 +594,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 Choose how the queue display is arranged.
               </p>
 
-              <div className="grid grid-cols-3 gap-2 pt-1">
+              <div className="grid grid-cols-3 gap-1.5 sm:gap-2 pt-1">
                 {(
                   [
                     { id: 'standard', label: 'Standard' },
@@ -608,7 +610,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                         layoutMode: layout.id,
                       })
                     }
-                    className={`py-2 px-2 text-xs font-semibold rounded-lg border text-center transition-all ${
+                    className={`py-2 px-1 sm:px-2 text-[11px] sm:text-xs font-semibold rounded-lg border text-center transition-all truncate ${
                       queueState.layoutMode === layout.id
                         ? 'bg-neutral-900 text-white border-neutral-900 shadow-xs'
                         : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
@@ -640,10 +642,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
           </div>
 
-          {/* Right Column: Waiting Queue (7 cols) */}
+          {/* Right Column: Waiting Queue (7 cols on lg) */}
           <div className="lg:col-span-7">
-            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-6 h-full flex flex-col">
-              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-6 h-full flex flex-col">
+              <div className="flex flex-col xs:flex-row xs:items-center justify-between pb-3 sm:pb-4 border-b border-slate-100 gap-1 xs:gap-0">
                 <h2 className="text-base font-bold text-slate-900 tracking-tight">
                   Waiting Queue · {queueState.waitingQueue.length}
                 </h2>
@@ -654,10 +656,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 )}
               </div>
 
-              {/* Queue List Items matching Image 1 */}
-              <div className="divide-y divide-slate-100 flex-1 overflow-y-auto max-h-[620px] py-1">
+              {/* Queue List Items */}
+              <div className="divide-y divide-slate-100 flex-1 overflow-y-auto max-h-[480px] sm:max-h-[580px] lg:max-h-[640px] py-1">
                 {queueState.waitingQueue.length === 0 ? (
-                  <div className="py-16 text-center text-slate-400">
+                  <div className="py-12 sm:py-16 text-center text-slate-400">
                     <p className="font-semibold text-base">Queue is clear</p>
                     <p className="text-xs mt-1 text-slate-400">
                       Add a plate number on the left to start queuing clients.
@@ -667,30 +669,29 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   queueState.waitingQueue.map((item, index) => (
                     <div
                       key={item.id}
-                      className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 hover:bg-slate-50/80 px-2 rounded-lg transition-colors group"
+                      className="py-2.5 sm:py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 hover:bg-slate-50/80 px-2 sm:px-3 rounded-lg transition-colors group"
                     >
                       {/* Left: Number circle badge + Plate + Service */}
-                      <div className="flex items-center gap-3 min-w-0">
-                        {/* Circle badge matching screenshot: light green circle with dark green number */}
+                      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs sm:text-sm flex items-center justify-center shrink-0">
                           {index + 1}
                         </div>
 
-                        <div className="min-w-0">
-                          <div className="text-sm sm:text-base font-black text-slate-900 tracking-tight">
+                        <div className="min-w-0 flex-1">
+                          <div className="text-sm sm:text-base font-black text-slate-900 tracking-tight truncate">
                             {item.plateNumber}
                           </div>
-                          <div className="text-[11px] sm:text-xs text-slate-500 truncate max-w-[180px] xs:max-w-[220px] sm:max-w-[280px]">
+                          <div className="text-[11px] sm:text-xs text-slate-500 truncate max-w-[200px] xs:max-w-[260px] sm:max-w-[320px]">
                             {item.service}
                           </div>
                         </div>
                       </div>
 
-                      {/* Right: Actions matching screenshot: [ -> Serve ] [ |> Skip ] [ Trash ] */}
+                      {/* Right: Actions */}
                       <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 self-end sm:self-center">
                         <button
                           onClick={() => handleServeItem(item)}
-                          className="inline-flex items-center gap-1 sm:gap-1.5 py-1.5 px-3 sm:px-3.5 text-xs font-bold text-white bg-neutral-900 hover:bg-neutral-800 rounded-lg shadow-xs transition-colors cursor-pointer active:scale-95"
+                          className="inline-flex items-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-2.5 sm:px-3.5 text-xs font-bold text-white bg-neutral-900 hover:bg-neutral-800 rounded-lg shadow-xs transition-colors cursor-pointer active:scale-95 min-h-[34px]"
                           title="Serve this client out of order"
                         >
                           <ArrowRight className="w-3.5 h-3.5" />
@@ -699,7 +700,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                         <button
                           onClick={() => openTransferModal(item)}
-                          className="inline-flex items-center gap-1 py-1.5 px-2 sm:px-2.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 rounded-lg transition-colors cursor-pointer active:scale-95"
+                          className="inline-flex items-center gap-1 py-1.5 sm:py-2 px-2 sm:px-2.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 rounded-lg transition-colors cursor-pointer active:scale-95 min-h-[34px]"
                           title="Transfer to another service in the list"
                         >
                           <ArrowRightLeft className="w-3.5 h-3.5 text-slate-500" />
@@ -708,7 +709,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                         <button
                           onClick={() => handleDelete(item.id, item.plateNumber)}
-                          className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                          className="p-1.5 sm:p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors min-h-[34px] min-w-[34px] flex items-center justify-center"
                           title="Remove from queue"
                         >
                           <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -723,11 +724,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         </div>
 
         {/* Lower Row: Logo Management + Announcements + Services Offered */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
-          {/* Card 1: Company Logo matching User Request (browse & save) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 pt-2">
+          {/* Card 1: Company Logo (browse & save) */}
           <div
             id="logo-management-card"
-            className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 flex flex-col justify-between space-y-4"
+            className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 flex flex-col justify-between space-y-3.5 sm:space-y-4"
           >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -760,13 +761,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 <div className="text-[11px] font-semibold text-slate-600 mb-1.5">
                   Logo Appearance Preview
                 </div>
-                <div className="grid grid-cols-2 gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-lg">
+                <div className="grid grid-cols-2 gap-2 p-2 sm:p-2.5 bg-slate-50 border border-slate-200 rounded-lg">
                   {/* Light background (Settings Panel) */}
                   <div className="flex flex-col items-center justify-center p-2 bg-white rounded-md border border-slate-200 shadow-2xs">
                     <div className="text-[10px] font-medium text-slate-400 mb-1">
                       Settings Header
                     </div>
-                    <div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center overflow-hidden bg-white shadow-xs p-1">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-slate-200 flex items-center justify-center overflow-hidden bg-white shadow-xs p-1">
                       {pendingLogoUrl ? (
                         <img
                           src={pendingLogoUrl}
@@ -790,7 +791,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     <div className="text-[10px] font-medium text-teal-400/80 mb-1">
                       TV Display
                     </div>
-                    <div className="w-14 h-14 rounded-full border border-teal-500/40 flex items-center justify-center overflow-hidden bg-white shadow-xs p-1">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-teal-500/40 flex items-center justify-center overflow-hidden bg-white shadow-xs p-1">
                       {pendingLogoUrl ? (
                         <img
                           src={pendingLogoUrl}
@@ -866,7 +867,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   <button
                     onClick={handleSaveLogo}
                     disabled={isProcessingLogo}
-                    className="flex-1 py-2.5 px-3 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 active:scale-98"
+                    className="flex-1 py-2.5 px-3 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 active:scale-98 min-h-[40px]"
                   >
                     <Check className="w-3.5 h-3.5" />
                     <span>Save as Default Logo</span>
@@ -876,7 +877,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       setPendingLogoUrl(null);
                       if (logoInputRef.current) logoInputRef.current.value = '';
                     }}
-                    className="py-2.5 px-3 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1"
+                    className="py-2.5 px-3 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1 min-h-[40px]"
                   >
                     <X className="w-3.5 h-3.5" />
                     <span>Cancel</span>
@@ -886,7 +887,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 <div className="space-y-2">
                   <button
                     onClick={() => logoInputRef.current?.click()}
-                    className="w-full py-2.5 px-4 text-xs font-bold text-white bg-neutral-900 hover:bg-neutral-800 rounded-lg shadow-xs transition-colors cursor-pointer flex items-center justify-center gap-2"
+                    className="w-full py-2.5 px-4 text-xs font-bold text-white bg-neutral-900 hover:bg-neutral-800 rounded-lg shadow-xs transition-colors cursor-pointer flex items-center justify-center gap-2 min-h-[40px]"
                   >
                     <Upload className="w-3.5 h-3.5" />
                     <span>Browse Logo</span>
@@ -897,7 +898,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                         saveDefaultLogo(queueState.customLogoUrl || null);
                         showToast('Current logo is confirmed as the default logo!');
                       }}
-                      className="w-full py-2 px-3 text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                      className="w-full py-2 px-3 text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1.5 min-h-[38px]"
                     >
                       <Check className="w-3.5 h-3.5 text-emerald-600" />
                       <span>Current Logo is Default</span>
@@ -909,7 +910,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               {queueState.customLogoUrl && (
                 <button
                   onClick={handleResetLogo}
-                  className="w-full py-2 px-3 text-xs font-semibold text-slate-600 hover:text-red-700 hover:bg-red-50 border border-slate-200 hover:border-red-200 rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                  className="w-full py-2 px-3 text-xs font-semibold text-slate-600 hover:text-red-700 hover:bg-red-50 border border-slate-200 hover:border-red-200 rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1.5 min-h-[38px]"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   <span>Reset to MGN Seal</span>
@@ -918,8 +919,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
           </div>
 
-          {/* Card 2: Announcements matching Image 2 (Zero space between textbox and save button) */}
-          <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 flex flex-col justify-between space-y-3">
+          {/* Card 2: Announcements */}
+          <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 flex flex-col justify-between space-y-3">
             <div className="space-y-1.5">
               <div className="flex items-center gap-2">
                 <Megaphone className="w-5 h-5 text-emerald-600" />
@@ -938,20 +939,20 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 value={announcementsText}
                 onChange={(e) => setAnnouncementsText(e.target.value)}
                 rows={4}
-                className="w-full p-3 text-xs font-normal text-slate-800 border border-slate-300 rounded-t-lg rounded-b-none border-b-0 focus:outline-hidden focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all leading-relaxed resize-y font-mono block"
+                className="w-full p-3 text-sm sm:text-xs font-normal text-slate-800 border border-slate-300 rounded-t-lg rounded-b-none border-b-0 focus:outline-hidden focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all leading-relaxed resize-y font-mono block"
                 placeholder="Welcome to MGN - CERTIFIED TRANSPORT EXPERTS.&#10;Please wait for your plate number to be called."
               />
               <button
                 onClick={handleSaveAnnouncements}
-                className="w-full py-2.5 px-4 text-xs font-bold text-white bg-neutral-900 hover:bg-neutral-800 rounded-t-none rounded-b-lg shadow-xs transition-colors cursor-pointer block"
+                className="w-full py-2.5 px-4 text-xs font-bold text-white bg-neutral-900 hover:bg-neutral-800 rounded-t-none rounded-b-lg shadow-xs transition-colors cursor-pointer block min-h-[40px]"
               >
                 Save Announcements
               </button>
             </div>
           </div>
 
-          {/* Card 3: Services Offered matching Image 2 (Zero space between textbox and save button) */}
-          <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 flex flex-col justify-between space-y-3">
+          {/* Card 3: Services Offered (Spans 2 columns on tablet md for balanced grid) */}
+          <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 flex flex-col justify-between space-y-3 md:col-span-2 lg:col-span-1">
             <div className="space-y-1.5">
               <div className="flex items-center gap-2">
                 <ListChecks className="w-5 h-5 text-emerald-600" />
@@ -970,12 +971,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 value={servicesText}
                 onChange={(e) => setServicesText(e.target.value)}
                 rows={4}
-                className="w-full p-3 text-xs font-normal text-slate-800 border border-slate-300 rounded-t-lg rounded-b-none border-b-0 focus:outline-hidden focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all leading-relaxed resize-y font-mono block"
+                className="w-full p-3 text-sm sm:text-xs font-normal text-slate-800 border border-slate-300 rounded-t-lg rounded-b-none border-b-0 focus:outline-hidden focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all leading-relaxed resize-y font-mono block"
                 placeholder="1. Private Emission Testing Center&#10;2. Driving School..."
               />
               <button
                 onClick={handleSaveServices}
-                className="w-full py-2.5 px-4 text-xs font-bold text-white bg-neutral-900 hover:bg-neutral-800 rounded-t-none rounded-b-lg shadow-xs transition-colors cursor-pointer block"
+                className="w-full py-2.5 px-4 text-xs font-bold text-white bg-neutral-900 hover:bg-neutral-800 rounded-t-none rounded-b-lg shadow-xs transition-colors cursor-pointer block min-h-[40px]"
               >
                 Save Services
               </button>
@@ -986,33 +987,35 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
       {/* History Modal */}
       {showHistoryModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white rounded-xl sm:rounded-2xl max-w-lg w-full p-4 sm:p-6 shadow-xl border border-slate-200 space-y-3.5 sm:space-y-4 max-h-[85vh] sm:max-h-[90vh] flex flex-col">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3 shrink-0">
               <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                 <History className="w-4 h-4 text-slate-700" />
                 <span>Served Clients History ({queueState.servedHistory.length})</span>
               </h3>
               <button
                 onClick={() => setShowHistoryModal(false)}
-                className="text-slate-400 hover:text-slate-700 text-sm font-semibold p-1"
+                className="text-slate-400 hover:text-slate-700 text-sm font-semibold p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
               >
                 ✕
               </button>
             </div>
 
-            <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 text-xs">
+            <div className="flex-1 overflow-y-auto divide-y divide-slate-100 text-xs min-h-0 pr-1">
               {queueState.servedHistory.length === 0 ? (
-                <p className="text-slate-400 text-center py-6">No served clients yet today.</p>
+                <p className="text-slate-400 text-center py-8">No served clients yet today.</p>
               ) : (
                 queueState.servedHistory.map((item, idx) => (
-                  <div key={item.id || idx} className="py-2.5 flex items-center justify-between">
-                    <div>
-                      <span className="font-bold text-slate-900 text-sm">{item.plateNumber}</span>
-                      <span className="text-slate-400 ml-2">#{item.ticketNumber}</span>
-                      <div className="text-slate-500">{item.service}</div>
+                  <div key={item.id || idx} className="py-2.5 flex items-center justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-baseline gap-1.5">
+                        <span className="font-bold text-slate-900 text-sm">{item.plateNumber}</span>
+                        <span className="text-slate-400 text-xs">#{item.ticketNumber}</span>
+                      </div>
+                      <div className="text-slate-500 truncate text-[11px] sm:text-xs">{item.service}</div>
                     </div>
-                    <div className="text-right text-slate-400 font-mono">
+                    <div className="text-right text-slate-400 font-mono shrink-0 text-[11px] sm:text-xs">
                       {item.servedAt || item.createdAt}
                     </div>
                   </div>
@@ -1020,19 +1023,19 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               )}
             </div>
 
-            <div className="flex justify-between items-center pt-2 border-t border-slate-100">
+            <div className="flex justify-between items-center pt-3 border-t border-slate-100 shrink-0">
               <button
                 onClick={() => {
                   onUpdateState({ ...queueState, servedHistory: [] });
                   showToast('History cleared.');
                 }}
-                className="text-xs text-red-600 hover:text-red-700 font-medium"
+                className="text-xs text-red-600 hover:text-red-700 font-medium cursor-pointer"
               >
                 Clear History
               </button>
               <button
                 onClick={() => setShowHistoryModal(false)}
-                className="px-4 py-2 bg-neutral-900 text-white rounded-lg text-xs font-bold hover:bg-neutral-800"
+                className="px-4 py-2 bg-neutral-900 text-white rounded-lg text-xs font-bold hover:bg-neutral-800 cursor-pointer"
               >
                 Close
               </button>
@@ -1048,18 +1051,18 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           onClick={() => setTransferModalItem(null)}
         >
           <div
-            className="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 space-y-4 max-h-[90vh] flex flex-col"
+            className="bg-white rounded-2xl max-w-lg w-full p-4 sm:p-6 shadow-2xl border border-slate-200 space-y-3.5 sm:space-y-4 max-h-[85vh] sm:max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 shrink-0">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
                   <ArrowRightLeft className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">Transfer Client Service</h3>
-                  <p className="text-xs text-slate-500">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900">Transfer Client Service</h3>
+                  <p className="text-[11px] sm:text-xs text-slate-500">
                     Select any service from the list to transfer this client.
                   </p>
                 </div>
@@ -1073,13 +1076,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
 
             {/* Target Client Info */}
-            <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-200/80 flex items-center justify-between gap-3">
+            <div className="bg-slate-50 rounded-xl p-3 sm:p-3.5 border border-slate-200/80 flex items-center justify-between gap-3 shrink-0">
               <div>
-                <span className="text-[11px] font-semibold text-slate-500 block uppercase tracking-wider">
+                <span className="text-[10px] sm:text-[11px] font-semibold text-slate-500 block uppercase tracking-wider">
                   Plate Number
                 </span>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-xl font-black text-slate-900 tracking-tight">
+                <div className="flex items-baseline gap-1.5 sm:gap-2">
+                  <span className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
                     {transferModalItem.plateNumber}
                   </span>
                   <span className="text-xs font-semibold text-slate-500">
@@ -1087,8 +1090,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   </span>
                 </div>
               </div>
-              <div className="text-right max-w-[220px]">
-                <span className="text-[11px] font-semibold text-slate-500 block uppercase tracking-wider">
+              <div className="text-right max-w-[150px] xs:max-w-[200px] sm:max-w-[240px]">
+                <span className="text-[10px] sm:text-[11px] font-semibold text-slate-500 block uppercase tracking-wider">
                   Current Service
                 </span>
                 <span className="text-xs font-bold text-slate-700 bg-white border border-slate-200 px-2 py-1 rounded-md inline-block truncate max-w-full">
@@ -1112,7 +1115,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               <select
                 value={transferTargetService}
                 onChange={(e) => setTransferTargetService(e.target.value)}
-                className="w-full px-3 py-2 text-xs font-semibold text-slate-800 bg-white border border-slate-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-neutral-900 focus:border-transparent cursor-pointer"
+                className="w-full px-3 py-2 text-base sm:text-xs font-semibold text-slate-800 bg-white border border-slate-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-neutral-900 focus:border-transparent cursor-pointer shrink-0"
               >
                 {queueState.services.map((svc, idx) => (
                   <option key={idx} value={svc}>
@@ -1122,7 +1125,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               </select>
 
               {/* Clickable Services List with 1-click Transfer */}
-              <div className="flex-1 overflow-y-auto divide-y divide-slate-100 border border-slate-200 rounded-xl max-h-56 mt-1">
+              <div className="flex-1 overflow-y-auto divide-y divide-slate-100 border border-slate-200 rounded-xl max-h-48 sm:max-h-56 mt-1">
                 {queueState.services.map((svc, idx) => {
                   const isCurrent = svc === transferModalItem.service;
                   const isSelected = svc === transferTargetService;
@@ -1165,7 +1168,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+            <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100 shrink-0">
               <button
                 type="button"
                 onClick={() => setTransferModalItem(null)}

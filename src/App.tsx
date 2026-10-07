@@ -106,9 +106,14 @@ export default function App() {
     <AdminPanel
       queueState={queueState}
       onUpdateState={(updated) => {
+        const previousCalledAt = queueState.lastCalledAt;
         handleUpdateState(updated);
-        // If an announcement was triggered
-        if (updated.lastCalledAt && updated.currentServing) {
+        // Only broadcast announcement if an announcement was newly and explicitly triggered
+        if (
+          updated.lastCalledAt &&
+          updated.lastCalledAt !== previousCalledAt &&
+          updated.currentServing
+        ) {
           broadcastAnnouncement(
             updated.currentServing.plateNumber,
             updated.currentServing.service

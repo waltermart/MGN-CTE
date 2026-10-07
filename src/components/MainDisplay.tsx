@@ -292,9 +292,9 @@ export const MainDisplay: React.FC<MainDisplayProps> = ({
 
           {/* 2. NOW SERVING Section - Auto expands to fill available height cleanly */}
           <div className="flex-1 min-h-0 flex flex-col justify-center space-y-0.5 sm:space-y-1 overflow-hidden">
-            {/* Header */}
-            <h2 className="text-center text-[clamp(1.05rem,min(2.4vw,3.2vh),2.25rem)] font-black tracking-[0.2em] sm:tracking-[0.4em] text-[#10b981] uppercase drop-shadow-[0_0_14px_rgba(16,185,129,0.45)] shrink-0">
-              N O W &nbsp; S E R V I N G
+            {/* Header: font size increased by 30%, character spacing decreased */}
+            <h2 className="text-center text-[clamp(1.37rem,min(3.12vw,4.16vh),2.93rem)] font-black tracking-[0.06em] sm:tracking-[0.1em] text-[#10b981] uppercase drop-shadow-[0_0_14px_rgba(16,185,129,0.45)] shrink-0">
+              NOW SERVING
             </h2>
 
             {/* Glowing Emerald / Teal Card fitting within viewport */}
