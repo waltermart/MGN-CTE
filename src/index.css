@@ -1,16 +1,29 @@
 @import "tailwindcss";
 
-html,
-body,
-#root {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #03171d;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+html, body {
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom subtle scrollbar styling for a polished settings experience */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.5);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.7);
 }
 
 @keyframes marquee {

@@ -374,7 +374,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans">
+    <div className="min-h-screen w-full bg-slate-50 text-slate-800 flex flex-col font-sans overflow-x-hidden overflow-y-auto">
       {/* Toast Notification */}
       {saveMessage && (
         <div className="fixed top-4 right-4 z-50 bg-neutral-900 text-white px-4 py-2.5 rounded-lg shadow-lg text-sm flex items-center gap-2 border border-neutral-700 animate-in fade-in slide-in-from-top-2">
